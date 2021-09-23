@@ -1,12 +1,14 @@
+import type { Ref } from 'vue'
 import { ref, watchEffect } from 'vue'
 
-function useTailwindDarkMode() {
+function useTailwindDarkMode(): [Ref<string | null>, () => void] {
   const isDarkModeString = ref(
     typeof window !== undefined ? localStorage.getItem('darkMode') : 'false'
   )
 
   function toggleDarkMode() {
-    isDarkModeString.value = isDarkModeString.value === 'true' ? 'false' : 'true'
+    isDarkModeString.value =
+      isDarkModeString.value === 'true' ? 'false' : 'true'
   }
 
   watchEffect(() => {
