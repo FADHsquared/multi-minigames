@@ -23,8 +23,8 @@ const [isDarkModeString, toggleDarkMode] = useTailwindDarkMode()
         <router-link to="/" exact-active-class="font-bold">Home</router-link>
       </li>
       <li class="hover:underline">
-        <router-link to="/about" exact-active-class="font-bold">
-          About
+        <router-link to="/games" exact-active-class="font-bold">
+          Games
         </router-link>
       </li>
     </ul>
