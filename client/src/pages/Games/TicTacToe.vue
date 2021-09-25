@@ -13,6 +13,10 @@ const board = ref<Board>([
 const currentTurnIsO = ref(false)
 const winner = ref<Entry>(null)
 
+function allRowsAreFilledWith(board: Board, fillingEntry: Entry) {
+  return board.some((row) => row.every((entry) => entry === fillingEntry))
+}
+
 function handleEntryClick(rowIdx: number, entryIdx: number) {
   if (!board.value[rowIdx][entryIdx] && !winner.value) {
     board.value[rowIdx][entryIdx] = currentTurnIsO.value ? 'o' : 'x'
@@ -26,13 +30,31 @@ function handleEntryClick(rowIdx: number, entryIdx: number) {
     })
 
     if (
-      board.value.some((row) => row.every((entry) => entry === 'o')) ||
-      rotated90DegsBoard.some((row) => row.every((entry) => entry === 'o'))
+      allRowsAreFilledWith(board.value, 'o') ||
+      allRowsAreFilledWith(rotated90DegsBoard, 'o')
     )
       winner.value = 'o'
     if (
-      board.value.some((row) => row.every((entry) => entry === 'x')) ||
-      rotated90DegsBoard.some((row) => row.every((entry) => entry === 'x'))
+      allRowsAreFilledWith(board.value, 'x') ||
+      allRowsAreFilledWith(rotated90DegsBoard, 'x')
+    )
+      winner.value = 'x'
+
+    // Diagonal win case
+    if (
+      board.value.every((row, rowIdx) => board.value[rowIdx][rowIdx] === 'o') ||
+      board.value.every(
+        (row, rowIdx) =>
+          board.value[rowIdx][board.value.length - rowIdx - 1] === 'o'
+      )
+    )
+      winner.value = 'o'
+    if (
+      board.value.every((row, rowIdx) => board.value[rowIdx][rowIdx] === 'x') ||
+      board.value.every(
+        (row, rowIdx) =>
+          board.value[rowIdx][board.value.length - rowIdx - 1] === 'x'
+      )
     )
       winner.value = 'x'
   }
@@ -44,6 +66,7 @@ function handleResetClick() {
     [null, null, null]
   ]
   winner.value = null
+  currentTurnIsO.value = false
 }
 </script>
 

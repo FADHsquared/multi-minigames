@@ -11,9 +11,9 @@ useHead({
   <div class="mx-4 flex">
     <div class="bg-gray-100 dark:bg-gray-900 rounded shadow">
       <img src="" alt="Tic-tac-toe image" />
-      <router-link to="/games/tic-tac-toe" class="hover:underline"
-        >Tic-tac-toe</router-link
-      >
+      <router-link to="/games/tic-tac-toe" class="hover:underline">
+        Tic-tac-toe
+      </router-link>
     </div>
   </div>
 </template>
