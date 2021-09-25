@@ -33,9 +33,10 @@ const [isDarkModeString, toggleDarkMode] = useTailwindDarkMode()
         <Moon v-if="isDarkModeString === 'true'" />
         <Sun v-else />
       </button>
-
-      <div class="bg-white w-8 h-8 rounded-full" />
-      <p>FADHsquared</p>
+      <button class="flex gap-x-2 items-center hover:bg-gray-50/20">
+        <div class="bg-white w-8 h-8 rounded-full" />
+        <p>FADHsquared</p>
+      </button>
     </div>
   </nav>
 </template>

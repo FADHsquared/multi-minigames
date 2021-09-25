@@ -7,5 +7,8 @@ useHead({
 </script>
 
 <template>
-  <h1 class="my-5 text-center text-5xl font-semibold">Home works!</h1>
+  <h1 class="my-5 text-center text-5xl font-semibold">Multi Minigames</h1>
+  <p class="text-center">
+    A collection of small games, playable offline or online.
+  </p>
 </template>
