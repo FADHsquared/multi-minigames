@@ -10,14 +10,12 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/games',
     name: 'Games',
-    component: () => import('../pages/Games/index.vue'),
-    children: [
-      {
-        path: '/tic-tac-toe',
-        name: 'TicTacToe',
-        component: () => import('../pages/Games/TicTacToe.vue')
-      }
-    ]
+    component: () => import('../pages/Games/index.vue')
+  },
+  {
+    path: '/games/tic-tac-toe',
+    name: 'TicTacToe',
+    component: () => import('../pages/Games/TicTacToe.vue')
   }
 ]
 
