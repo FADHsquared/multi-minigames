@@ -5,6 +5,8 @@ import { ref, inject } from 'vue'
 import { X, Circle } from 'lucide-vue-next'
 
 const socket = inject<Socket>('socket')
+// RESTRUCTURE SOCKET.IO THINGS LATER
+socket?.connect()
 
 type Entry = null | 'x' | 'o'
 type Board = Entry[][]
@@ -23,6 +25,10 @@ function allRowsAreFilledWith(board: Board, fillingEntry: Entry) {
 
 function handleEntryClick(rowIdx: number, entryIdx: number) {
   if (!board.value[rowIdx][entryIdx] && !winner.value) {
+    socket?.emit('send-turn', {
+      currentTurnIsO: currentTurnIsO.value,
+      position: [rowIdx, entryIdx]
+    })
     board.value[rowIdx][entryIdx] = currentTurnIsO.value ? 'o' : 'x'
     currentTurnIsO.value = !currentTurnIsO.value
 

@@ -16,7 +16,7 @@ export class EventsGateway {
   @WebSocketServer()
   server: Server
 
-  @SubscribeMessage('connect')
+  @SubscribeMessage('connection')
   handleConnect() {
     this.logger.log('connected soembody')
   }
