@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { TicTacToeTurnPayload } from '../../../../types'
+
 import type { Socket } from 'socket.io-client'
 
 import { ref, inject } from 'vue'
@@ -7,6 +9,10 @@ import { X, Circle } from 'lucide-vue-next'
 const socket = inject<Socket>('socket')
 // RESTRUCTURE SOCKET.IO THINGS LATER
 socket?.connect()
+
+socket?.on('send-turn', (turnData: TicTacToeTurnPayload) => {
+  console.log(turnData)
+})
 
 type Entry = null | 'x' | 'o'
 type Board = Entry[][]
