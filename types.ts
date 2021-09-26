@@ -1,4 +1,4 @@
 export interface TicTacToeTurnPayload {
-  turnOf: "x" | "o";
-  position: [number, number];
+  turnOf: 'x' | 'o'
+  position: [number, number]
 }
