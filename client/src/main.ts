@@ -1,8 +1,20 @@
 import { createApp } from 'vue'
-import { createHead } from "@vueuse/head"
+import { createHead } from '@vueuse/head'
 import App from './App.vue'
+import socketIOVue, { SocketIOVueOpts } from './plugins/socket.io-vue'
 
 import router from './router'
 import './index.css'
 
-createApp(App).use(createHead()).use(router).mount('#app')
+const socketIOVueOpts: SocketIOVueOpts = {
+  uri: ':3000',
+  opts: {
+    autoConnect: false
+  }
+}
+
+createApp(App)
+  .use(createHead())
+  .use(router)
+  .use(socketIOVue, socketIOVueOpts)
+  .mount('#app')

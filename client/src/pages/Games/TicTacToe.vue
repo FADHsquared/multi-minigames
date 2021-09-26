@@ -1,6 +1,10 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import type { Socket } from 'socket.io-client'
+
+import { ref, inject } from 'vue'
 import { X, Circle } from 'lucide-vue-next'
+
+const socket = inject<Socket>('socket')
 
 type Entry = null | 'x' | 'o'
 type Board = Entry[][]
