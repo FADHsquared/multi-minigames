@@ -1,4 +1,4 @@
 export interface TicTacToeTurnPayload {
-  turnOf: 'x' | 'o'
+  currentTurnIsO: boolean
   position: [number, number]
 }

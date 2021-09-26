@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core'
+import { Logger } from '@nestjs/common'
 import {
   FastifyAdapter,
   NestFastifyApplication
@@ -11,5 +12,6 @@ async function bootstrap() {
     new FastifyAdapter()
   )
   await app.listen(3000, '0.0.0.0')
+  new Logger('NestApplication').log(`Listening on ${await app.getUrl()}`)
 }
 bootstrap()
