@@ -4,6 +4,7 @@ import {
   ConnectedSocket,
   MessageBody,
   OnGatewayConnection,
+  OnGatewayDisconnect,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
@@ -13,7 +14,7 @@ import { Logger } from '@nestjs/common'
 import { Socket, Server } from 'socket.io'
 
 @WebSocketGateway({ cors: true, serveClient: false })
-export class EventsGateway implements OnGatewayConnection {
+export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   private readonly logger = new Logger(EventsGateway.name)
 
   @WebSocketServer()
@@ -21,6 +22,10 @@ export class EventsGateway implements OnGatewayConnection {
 
   handleConnection(@ConnectedSocket() client: Socket) {
     this.logger.log(`Connection: ${client.id}`)
+  }
+
+  handleDisconnect(@ConnectedSocket() client: Socket) {
+    this.logger.log(`Disconnection: ${client.id}`)
   }
 
   @SubscribeMessage('send-turn')

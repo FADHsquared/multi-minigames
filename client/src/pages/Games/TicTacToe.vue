@@ -3,12 +3,12 @@ import type { TicTacToeTurnPayload } from '../../../../types'
 
 import type { Socket } from 'socket.io-client'
 
-import { ref, inject } from 'vue'
+import { ref, inject, onUnmounted } from 'vue'
 import { X, Circle } from 'lucide-vue-next'
 
 const socket = inject<Socket>('socket')
 // RESTRUCTURE SOCKET.IO THINGS LATER
-socket?.connect()
+// socket?.connect()
 
 socket?.on('send-turn', (turnData: TicTacToeTurnPayload) => {
   console.log(turnData)
@@ -84,10 +84,23 @@ function handleResetClick() {
   winner.value = null
   currentTurnIsO.value = false
 }
+function handleOnlineClick() {
+  handleResetClick()
+}
+
+onUnmounted(() => {
+  socket?.disconnect()
+})
 </script>
 
 <template>
   <main class="flex-grow flex flex-col items-center justify-center gap-y-2">
+    <p>Mode:</p>
+    <div class="border-2 border-gray-400">
+      <button>Offline</button>
+      <button @click="handleOnlineClick">Online</button>
+    </div>
+
     <p v-if="winner">{{ winner }} won!</p>
     <div class="w-max divide-y-2 divide-gray-400">
       <div
