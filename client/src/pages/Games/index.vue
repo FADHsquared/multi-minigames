@@ -22,15 +22,13 @@ const games = [
       v-for="game in games"
       :key="game.sublink"
       class="
-        bg-gray-100
-        dark:bg-gray-900
+        border-4 border-yellow-600
         px-3.5
         pt-2
         pb-1.5
         flex flex-col
         items-center
-        rounded
-        shadow
+        rounded-xl
       "
     >
       <component :is="game.icon" size="36" />
