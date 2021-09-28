@@ -8,9 +8,7 @@ const [isDarkModeString, toggleDarkMode] = useTailwindDarkMode()
 <template>
   <nav
     class="
-      bg-green-600
-      text-white
-      dark:bg-green-800
+      border-b-4 border-yellow-600
       px-3
       py-2
       flex
