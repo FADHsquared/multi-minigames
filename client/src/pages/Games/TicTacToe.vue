@@ -120,7 +120,7 @@ onUnmounted(() => {
       </div>
     </div>
     <button
-      class="px-1 border-2 border-gray-400 active:bg-blue-600/25"
+      class="px-1 border-2 border-yellow-600 rounded-md active:bg-blue-600/25"
       @click="handleResetClick"
     >
       Reset Board
