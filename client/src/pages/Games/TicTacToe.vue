@@ -1,11 +1,17 @@
 <script setup lang="ts">
+const props = defineProps<{
+  room: string
+}>()
+
 import type { TicTacToeTurnPayload } from '../../../../types'
 
 import type { Socket } from 'socket.io-client'
 
+import { useRouter } from 'vue-router'
 import { ref, inject, onUnmounted } from 'vue'
 import { X, Circle } from 'lucide-vue-next'
 
+const router = useRouter()
 const socket = inject<Socket>('socket')
 // RESTRUCTURE SOCKET.IO THINGS LATER
 // socket?.connect()
@@ -24,6 +30,9 @@ const board = ref<Board>([
 ])
 const currentTurnIsO = ref(false)
 const winner = ref<Entry>(null)
+
+const isOnlineMode = ref(!!props.room.length)
+const isRequestingOnline = ref(false)
 
 function allRowsAreFilledWith(board: Board, fillingEntry: Entry) {
   return board.some((row) => row.every((entry) => entry === fillingEntry))
@@ -84,8 +93,19 @@ function handleResetClick() {
   winner.value = null
   currentTurnIsO.value = false
 }
-function handleOnlineClick() {
-  handleResetClick()
+function handleOnlineClick(e) {
+  if (!props.room.length) {
+    isRequestingOnline.value = true
+    console.log(e)
+  }
+}
+function handleOfflineClick() {
+  if (props.room.length) {
+    router.push('/games/tic-tac-toe').then(() => {
+      isOnlineMode.value = !!props.room.length
+    })
+    handleResetClick()
+  }
 }
 
 onUnmounted(() => {
@@ -96,11 +116,30 @@ onUnmounted(() => {
 <template>
   <main class="flex-grow flex flex-col items-center justify-center gap-y-2">
     <p>Mode:</p>
-    <div class="border-2 border-gray-400">
-      <button>Offline</button>
-      <button @click="handleOnlineClick">Online</button>
+    <div class="border-2 border-yellow-600 rounded-md">
+      <button
+        :class="{ 'font-bold': !isOnlineMode }"
+        class="mx-1"
+        @click="handleOfflineClick"
+      >
+        Offline
+      </button>
+      <button
+        :class="{ 'font-bold': isOnlineMode }"
+        class="mx-1"
+        @click="handleOnlineClick"
+      >
+        Online
+      </button>
     </div>
-
+    <form
+      v-if="isRequestingOnline"
+      class="p-2 pt-0.5 border-2 border-yellow-600 rounded-md"
+      @submit.prevent="console.log($event)"
+    >
+      <p>Enter a room code:</p>
+      <input type="text" class="dark:bg-gray-900" />
+    </form>
     <p v-if="winner">{{ winner }} won!</p>
     <div class="w-max divide-y-2 divide-gray-400">
       <div
