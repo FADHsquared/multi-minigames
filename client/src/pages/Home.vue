@@ -17,7 +17,7 @@ const contributionMethods = [
     name: 'JavaScript code',
     icon: Code2,
     description:
-      "You can also submit a working version of the game in JavaScript. Submit a PR or contact us on Discord and we'll convert it to a Vue game and add it to this site."
+      "Submit a PR or contact us on Discord and we'll convert it to a Vue game and add it to this site."
   },
   {
     name: 'Vue code',
@@ -34,14 +34,14 @@ const contributionMethods = [
     A collection of small games, playable offline or online.
   </p>
   <h2 class="my-2.5 text-center text-3xl font-semibold">Contribute</h2>
-  <div class="flex flex-col sm:flex-row gap-y-4 max-w-6xl mx-auto">
+  <div class="flex flex-col sm:flex-row gap-y-4 max-w-xs sm:max-w-5xl mx-auto">
     <div
       v-for="contributionMethod in contributionMethods"
       :key="contributionMethod.name"
       class="
         flex-1
         border-4 border-yellow-600
-        rounded-lg
+        rounded-xl
         flex flex-col
         items-center
         p-2
@@ -50,7 +50,7 @@ const contributionMethods = [
     >
       <component :is="contributionMethod.icon" class="my-1" />
       <p class="font-semibold text-lg">{{ contributionMethod.name }}</p>
-      <p>{{ contributionMethod.description }}</p>
+      <p class="text-justify">{{ contributionMethod.description }}</p>
     </div>
   </div>
 </template>
