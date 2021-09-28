@@ -111,11 +111,11 @@ onUnmounted(() => {
         <button
           v-for="(entry, entryIdx) in row"
           :key="entryIdx"
-          class="align-bottom w-16 h-16 inline-flex items-center justify-center"
+          class="align-bottom w-20 h-20 inline-flex items-center justify-center"
           @click="handleEntryClick(rowIdx, entryIdx)"
         >
-          <Circle v-if="entry === 'o'" />
-          <X v-if="entry === 'x'" />
+          <Circle v-if="entry === 'o'" size="36" />
+          <X v-if="entry === 'x'" size="36" />
         </button>
       </div>
     </div>
