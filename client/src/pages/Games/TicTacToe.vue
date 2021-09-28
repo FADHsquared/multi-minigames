@@ -8,16 +8,36 @@ import type { TicTacToeTurnPayload } from '../../../../types'
 import type { Socket } from 'socket.io-client'
 
 import { useRouter } from 'vue-router'
-import { ref, inject, onUnmounted } from 'vue'
+import { ref, inject, onUnmounted, watchEffect } from 'vue'
 import { X, Circle } from 'lucide-vue-next'
 
 const router = useRouter()
 const socket = inject<Socket>('socket')
-// RESTRUCTURE SOCKET.IO THINGS LATER
-// socket?.connect()
 
 socket?.on('send-turn', (turnData: TicTacToeTurnPayload) => {
-  console.log(turnData)
+  board.value[turnData.position[0]][turnData.position[1]] =
+    turnData.currentTurnIsO ? 'o' : 'x'
+  currentTurnIsO.value = !turnData.currentTurnIsO
+
+  checkWinCases()
+})
+socket?.on('send-reset', () => {
+  resetBoard()
+})
+
+const isOnlineMode = ref(!!props.room.length)
+watchEffect(() => {
+  if (props.room.length) {
+    socket?.connect()
+    socket?.emit('request-join-room', props.room, (response: string) => {
+      if (response === 'denied') {
+        alert('This room already has two players in it!')
+        router.replace('/games/tic-tac-toe')
+      }
+    })
+  } else {
+    socket?.disconnect()
+  }
 })
 
 type Entry = null | 'x' | 'o'
@@ -31,60 +51,61 @@ const board = ref<Board>([
 const currentTurnIsO = ref(false)
 const winner = ref<Entry>(null)
 
-const isOnlineMode = ref(!!props.room.length)
-const isRequestingOnline = ref(false)
-
 function allRowsAreFilledWith(board: Board, fillingEntry: Entry) {
   return board.some((row) => row.every((entry) => entry === fillingEntry))
+}
+function checkWinCases() {
+  const rotated90DegsBoard: Board = [[], [], []]
+  board.value.forEach((row, rowIdx) => {
+    row.forEach((entry, entryIdx) => {
+      rotated90DegsBoard[entryIdx][rowIdx] = entry
+    })
+  })
+
+  if (
+    allRowsAreFilledWith(board.value, 'o') ||
+    allRowsAreFilledWith(rotated90DegsBoard, 'o')
+  )
+    winner.value = 'o'
+  if (
+    allRowsAreFilledWith(board.value, 'x') ||
+    allRowsAreFilledWith(rotated90DegsBoard, 'x')
+  )
+    winner.value = 'x'
+
+  // Diagonal win case
+  if (
+    board.value.every((row, rowIdx) => board.value[rowIdx][rowIdx] === 'o') ||
+    board.value.every(
+      (row, rowIdx) =>
+        board.value[rowIdx][board.value.length - rowIdx - 1] === 'o'
+    )
+  )
+    winner.value = 'o'
+  if (
+    board.value.every((row, rowIdx) => board.value[rowIdx][rowIdx] === 'x') ||
+    board.value.every(
+      (row, rowIdx) =>
+        board.value[rowIdx][board.value.length - rowIdx - 1] === 'x'
+    )
+  )
+    winner.value = 'x'
 }
 
 function handleEntryClick(rowIdx: number, entryIdx: number) {
   if (!board.value[rowIdx][entryIdx] && !winner.value) {
-    socket?.emit('send-turn', {
+    socket?.emit('send-turn', <TicTacToeTurnPayload>{
       currentTurnIsO: currentTurnIsO.value,
-      position: [rowIdx, entryIdx]
+      position: [rowIdx, entryIdx],
+      toRoom: props.room
     })
     board.value[rowIdx][entryIdx] = currentTurnIsO.value ? 'o' : 'x'
     currentTurnIsO.value = !currentTurnIsO.value
 
-    const rotated90DegsBoard: Board = [[], [], []]
-    board.value.forEach((row, rowIdx) => {
-      row.forEach((entry, entryIdx) => {
-        rotated90DegsBoard[entryIdx][rowIdx] = entry
-      })
-    })
-
-    if (
-      allRowsAreFilledWith(board.value, 'o') ||
-      allRowsAreFilledWith(rotated90DegsBoard, 'o')
-    )
-      winner.value = 'o'
-    if (
-      allRowsAreFilledWith(board.value, 'x') ||
-      allRowsAreFilledWith(rotated90DegsBoard, 'x')
-    )
-      winner.value = 'x'
-
-    // Diagonal win case
-    if (
-      board.value.every((row, rowIdx) => board.value[rowIdx][rowIdx] === 'o') ||
-      board.value.every(
-        (row, rowIdx) =>
-          board.value[rowIdx][board.value.length - rowIdx - 1] === 'o'
-      )
-    )
-      winner.value = 'o'
-    if (
-      board.value.every((row, rowIdx) => board.value[rowIdx][rowIdx] === 'x') ||
-      board.value.every(
-        (row, rowIdx) =>
-          board.value[rowIdx][board.value.length - rowIdx - 1] === 'x'
-      )
-    )
-      winner.value = 'x'
+    checkWinCases()
   }
 }
-function handleResetClick() {
+function resetBoard() {
   board.value = [
     [null, null, null],
     [null, null, null],
@@ -93,12 +114,36 @@ function handleResetClick() {
   winner.value = null
   currentTurnIsO.value = false
 }
-function handleOnlineClick(e) {
+function handleResetClick() {
+  socket?.emit('send-reset', props.room)
+  resetBoard()
+}
+
+const isRequestingOnline = ref(false)
+const roomCodeInputRef = ref<null | HTMLInputElement>(null)
+const roomCode = ref('')
+
+function handleOnlineClick() {
   if (!props.room.length) {
     isRequestingOnline.value = true
-    console.log(e)
+    setTimeout(() => {
+      roomCodeInputRef.value?.focus()
+    }, 0)
   }
 }
+function handleFocusOut() {
+  isRequestingOnline.value = false
+}
+function handleRoomCodeSubmit() {
+  if (roomCode.value.length) {
+    isRequestingOnline.value = false
+    router.push(`/games/tic-tac-toe/${roomCode.value}`).then(() => {
+      isOnlineMode.value = !!props.room.length
+    })
+    handleResetClick()
+  }
+}
+
 function handleOfflineClick() {
   if (props.room.length) {
     router.push('/games/tic-tac-toe').then(() => {
@@ -109,6 +154,7 @@ function handleOfflineClick() {
 }
 
 onUnmounted(() => {
+  socket?.off()
   socket?.disconnect()
 })
 </script>
@@ -133,12 +179,18 @@ onUnmounted(() => {
       </button>
     </div>
     <form
-      v-if="isRequestingOnline"
+      v-show="isRequestingOnline"
       class="p-2 pt-0.5 border-2 border-yellow-600 rounded-md"
-      @submit.prevent="console.log($event)"
+      @submit.prevent="handleRoomCodeSubmit"
     >
-      <p>Enter a room code:</p>
-      <input type="text" class="dark:bg-gray-900" />
+      <p>Enter a room code, press enter to go:</p>
+      <input
+        ref="roomCodeInputRef"
+        v-model="roomCode"
+        type="text"
+        class="dark:bg-gray-900 w-full"
+        @focusout="handleFocusOut"
+      />
     </form>
     <p v-if="winner">{{ winner }} won!</p>
     <div class="w-max divide-y-2 divide-gray-400">
