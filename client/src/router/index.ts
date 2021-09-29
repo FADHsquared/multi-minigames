@@ -17,6 +17,11 @@ const routes: RouteRecordRaw[] = [
     name: 'TicTacToe',
     component: () => import('../pages/Games/TicTacToe.vue'),
     props: true
+  },
+  {
+    path: '/games/snake',
+    name: 'Snake',
+    component: () => import('../pages/Games/Snake.vue')
   }
 ]
 
