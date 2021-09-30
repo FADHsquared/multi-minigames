@@ -12,6 +12,15 @@ function randomNumberZeroToMax(max: number) {
   return Math.round(Math.random() * max)
 }
 function randomPixelAsFood(gridSize: number) {
+  let randomY: number
+  let randomX: number
+  do {
+    randomY = randomNumberZeroToMax(gridSize - 1)
+    randomX = randomNumberZeroToMax(gridSize - 1)
+  } while (
+    snakeLocations.some(([locX, locY]) => locX === randomX && locY === randomY)
+  )
+
   pixelRows.value[randomNumberZeroToMax(gridSize - 1)][
     randomNumberZeroToMax(gridSize - 1)
   ] = 'food'
