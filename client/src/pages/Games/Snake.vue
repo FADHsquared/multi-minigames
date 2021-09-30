@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onUnmounted } from 'vue'
 
-const gridSquareSize = 30
+const gridSquareSize = 17
 const pixelRows = ref(
   Array.from({ length: gridSquareSize }, () =>
     new Array(gridSquareSize).fill(null)
@@ -21,13 +21,11 @@ function randomPixelAsFood(gridSize: number) {
     snakeLocations.some(([locX, locY]) => locX === randomX && locY === randomY)
   )
 
-  pixelRows.value[randomNumberZeroToMax(gridSize - 1)][
-    randomNumberZeroToMax(gridSize - 1)
-  ] = 'food'
+  pixelRows.value[randomY][randomX] = 'food'
 }
-randomPixelAsFood(gridSquareSize)
 
-let snakeLocations: [x: number, y: number][] = [[1, 1]]
+let snakeLocations: [x: number, y: number][] = [[1, 8]]
+randomPixelAsFood(gridSquareSize)
 
 let snakeMovingInterval: number
 const interval = 200
