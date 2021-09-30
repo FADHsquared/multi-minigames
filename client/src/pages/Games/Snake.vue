@@ -18,67 +18,151 @@ function randomPixelAsFood(gridSize: number) {
 }
 randomPixelAsFood(gridSquareSize)
 
-let snakeHeadLocationY = 1
-let snakeHeadLocationX = 1
+let snakeLocations: [x: number, y: number][] = [[1, 1]]
 
-pixelRows.value[snakeHeadLocationY][snakeHeadLocationX] = 'snake'
 let snakeMovingInterval: number
-const interval = 500
+const interval = 200
+const isStatusLost = ref(false)
 
+function updateGrid(snake: [x: number, y: number][]) {
+  pixelRows.value = pixelRows.value.map((pixelRow, rowIdx) =>
+    pixelRow.map((pixel, pixelIdx) => {
+      if (snake.some(([x, y]) => x === pixelIdx && y === rowIdx)) return 'snake'
+      if (pixel === 'food') return 'food'
+    })
+  )
+}
+updateGrid(snakeLocations)
 const moves = {
   w() {
     clearInterval(snakeMovingInterval)
     snakeMovingInterval = setInterval(() => {
-      console.log('Moving W!')
+      const [prevX, prevY] = snakeLocations[snakeLocations.length - 1]
+      if (
+        snakeLocations.some(
+          ([xLoc, yLoc]) => prevX === xLoc && prevY - 1 === yLoc
+        )
+      ) {
+        isStatusLost.value = true
+        clearInterval(snakeMovingInterval)
+        return
+      }
+      if (pixelRows.value[prevY - 1][prevX] === 'food') {
+        snakeLocations = [...snakeLocations, [prevX, prevY - 1]]
+        randomPixelAsFood(gridSquareSize)
+      } else {
+        snakeLocations = [
+          ...snakeLocations.slice(1, snakeLocations.length),
+          [prevX, prevY - 1]
+        ]
+      }
+      updateGrid(snakeLocations)
     }, interval)
   },
   s() {
     clearInterval(snakeMovingInterval)
     snakeMovingInterval = setInterval(() => {
-      console.log('Moving S!')
+      const [prevX, prevY] = snakeLocations[snakeLocations.length - 1]
+      if (
+        snakeLocations.some(
+          ([xLoc, yLoc]) => prevX === xLoc && prevY + 1 === yLoc
+        )
+      ) {
+        isStatusLost.value = true
+        clearInterval(snakeMovingInterval)
+        return
+      }
+      if (pixelRows.value[prevY + 1][prevX] === 'food') {
+        snakeLocations = [...snakeLocations, [prevX, prevY + 1]]
+        randomPixelAsFood(gridSquareSize)
+      } else {
+        snakeLocations = [
+          ...snakeLocations.slice(1, snakeLocations.length),
+          [prevX, prevY + 1]
+        ]
+      }
+      updateGrid(snakeLocations)
     }, interval)
   },
   a() {
     clearInterval(snakeMovingInterval)
     snakeMovingInterval = setInterval(() => {
-      console.log('Moving A!')
+      const [prevX, prevY] = snakeLocations[snakeLocations.length - 1]
+      if (
+        snakeLocations.some(
+          ([xLoc, yLoc]) => prevX - 1 === xLoc && prevY === yLoc
+        )
+      ) {
+        isStatusLost.value = true
+        clearInterval(snakeMovingInterval)
+        return
+      }
+      if (pixelRows.value[prevY][prevX - 1] === 'food') {
+        snakeLocations = [...snakeLocations, [prevX - 1, prevY]]
+        randomPixelAsFood(gridSquareSize)
+      } else {
+        snakeLocations = [
+          ...snakeLocations.slice(1, snakeLocations.length),
+          [prevX - 1, prevY]
+        ]
+      }
+      updateGrid(snakeLocations)
     }, interval)
   },
   d() {
     clearInterval(snakeMovingInterval)
     snakeMovingInterval = setInterval(() => {
-      console.log('Moving D!')
-      snakeHeadLocationX += 1
-      pixelRows.value[snakeHeadLocationY][snakeHeadLocationX] = 'snake'
+      const [prevX, prevY] = snakeLocations[snakeLocations.length - 1]
+      if (
+        snakeLocations.some(
+          ([xLoc, yLoc]) => prevX + 1 === xLoc && prevY === yLoc
+        )
+      ) {
+        isStatusLost.value = true
+        clearInterval(snakeMovingInterval)
+        return
+      }
+      if (pixelRows.value[prevY][prevX + 1] === 'food') {
+        snakeLocations = [...snakeLocations, [prevX + 1, prevY]]
+        randomPixelAsFood(gridSquareSize)
+      } else {
+        snakeLocations = [
+          ...snakeLocations.slice(1, snakeLocations.length),
+          [prevX + 1, prevY]
+        ]
+      }
+      updateGrid(snakeLocations)
     }, interval)
   }
 }
 
 function handleKeydown(e: KeyboardEvent) {
   console.log(e.key)
-  moves[e.key]()
+  if (e.key in moves && !isStatusLost.value) {
+    moves[e.key as 'w' | 's' | 'a' | 'd']()
+  }
 }
 window.addEventListener('keydown', handleKeydown)
 
 onUnmounted(() => {
   window.removeEventListener('keydown', handleKeydown)
+  clearInterval(snakeMovingInterval)
 })
 </script>
 
 <template>
   <main class="flex-grow flex flex-col items-center justify-center gap-y-2">
-    <div
-      class="border-4 border-yellow-600 rounded-xl p-2 flex flex-col gap-y-0.5"
-    >
+    <p v-if="isStatusLost">You hit yourself!</p>
+    <div class="border-4 border-yellow-600 rounded-xl p-2 flex flex-col">
       <div
         v-for="(pixelRow, pixelRowIdx) in pixelRows"
         :key="pixelRowIdx"
-        class="flex gap-x-0.5"
+        class="flex"
       >
         <div
           v-for="(pixel, pixelIdx) in pixelRow"
           :key="pixelIdx"
-          class="w-4 h-4 border-2 border-gray-400 rounded"
+          class="w-4 h-4 rounded border-2 border-gray-400/10"
           :class="{
             'bg-gray-300': pixel === 'food',
             'bg-gray-400': pixel === 'snake'
