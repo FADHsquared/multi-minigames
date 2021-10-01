@@ -144,12 +144,21 @@ const moves = {
 }
 
 function handleKeydown(e: KeyboardEvent) {
-  console.log(e.key)
   if (e.key in moves && !isStatusLost.value) {
     moves[e.key as 'w' | 's' | 'a' | 'd']()
   }
 }
 window.addEventListener('keydown', handleKeydown)
+
+function handleResetPress() {
+  pixelRows.value = Array.from({ length: gridSquareSize }, () =>
+    new Array(gridSquareSize).fill(null)
+  )
+  snakeLocations = [[1, 8]]
+  updateGrid(snakeLocations)
+  randomPixelAsFood(gridSquareSize)
+  isStatusLost.value = false
+}
 
 onUnmounted(() => {
   window.removeEventListener('keydown', handleKeydown)
@@ -159,7 +168,14 @@ onUnmounted(() => {
 
 <template>
   <main class="flex-grow flex flex-col items-center justify-center gap-y-2">
-    <p v-if="isStatusLost">You hit yourself!</p>
+    <p v-if="isStatusLost">
+      You hit yourself!<button
+        class="border-2 border-yellow-600 rounded"
+        @click="handleResetPress"
+      >
+        Reset
+      </button>
+    </p>
     <div class="border-4 border-yellow-600 rounded-xl p-2 flex flex-col">
       <div
         v-for="(pixelRow, pixelRowIdx) in pixelRows"
