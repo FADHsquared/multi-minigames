@@ -54,6 +54,19 @@ const winner = ref<Entry>(null)
 function allRowsAreFilledWith(board: Board, fillingEntry: Entry) {
   return board.some((row) => row.every((entry) => entry === fillingEntry))
 }
+
+function checkDiagonalWinCaseOf(playerLetter: 'x' | 'o') {
+  if (
+    board.value.every(
+      (row, rowIdx) => board.value[rowIdx][rowIdx] === playerLetter
+    ) ||
+    board.value.every(
+      (row, rowIdx) =>
+        board.value[rowIdx][board.value.length - rowIdx - 1] === playerLetter
+    )
+  )
+    winner.value = playerLetter
+}
 function checkWinCases() {
   const rotated90DegsBoard: Board = [[], [], []]
   board.value.forEach((row, rowIdx) => {
@@ -73,23 +86,8 @@ function checkWinCases() {
   )
     winner.value = 'x'
 
-  // Diagonal win case
-  if (
-    board.value.every((row, rowIdx) => board.value[rowIdx][rowIdx] === 'o') ||
-    board.value.every(
-      (row, rowIdx) =>
-        board.value[rowIdx][board.value.length - rowIdx - 1] === 'o'
-    )
-  )
-    winner.value = 'o'
-  if (
-    board.value.every((row, rowIdx) => board.value[rowIdx][rowIdx] === 'x') ||
-    board.value.every(
-      (row, rowIdx) =>
-        board.value[rowIdx][board.value.length - rowIdx - 1] === 'x'
-    )
-  )
-    winner.value = 'x'
+  checkDiagonalWinCaseOf('x')
+  checkDiagonalWinCaseOf('o')
 }
 
 function handleEntryClick(rowIdx: number, entryIdx: number) {
