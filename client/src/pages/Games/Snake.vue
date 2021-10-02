@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onUnmounted } from 'vue'
-import { randomNumberZeroToMax } from '../../modules/game-logic/helper'
+import { randomNumberFromZeroToMax } from '../../modules/game-logic/helper'
 
 const gridSquareSize = 17
 const pixelRows = ref(
@@ -13,8 +13,8 @@ function randomPixelAsFood(gridSize: number) {
   let randomY: number
   let randomX: number
   do {
-    randomY = randomNumberZeroToMax(gridSize - 1)
-    randomX = randomNumberZeroToMax(gridSize - 1)
+    randomY = randomNumberFromZeroToMax(gridSize - 1)
+    randomX = randomNumberFromZeroToMax(gridSize - 1)
   } while (
     snakeLocations.some(([locX, locY]) => locX === randomX && locY === randomY)
   )

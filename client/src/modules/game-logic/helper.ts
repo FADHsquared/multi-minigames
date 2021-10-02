@@ -1,3 +1,3 @@
-export function randomNumberZeroToMax(max: number) {
+export function randomNumberFromZeroToMax(max: number) {
   return Math.round(Math.random() * max)
 }
