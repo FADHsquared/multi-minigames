@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onUnmounted } from 'vue'
+import { randomNumberZeroToMax } from '../../modules/game-logic/helper'
 
 const gridSquareSize = 17
 const pixelRows = ref(
@@ -8,9 +9,6 @@ const pixelRows = ref(
   )
 )
 
-function randomNumberZeroToMax(max: number) {
-  return Math.round(Math.random() * max)
-}
 function randomPixelAsFood(gridSize: number) {
   let randomY: number
   let randomX: number
@@ -40,106 +38,47 @@ function updateGrid(snake: [x: number, y: number][]) {
   )
 }
 updateGrid(snakeLocations)
+
+function setSnakeInterval(offsetX: number, offsetY: number) {
+  snakeMovingInterval = setInterval(() => {
+    const [prevX, prevY] = snakeLocations[snakeLocations.length - 1]
+    if (
+      snakeLocations.some(
+        ([xLoc, yLoc]) => prevX + offsetX === xLoc && prevY + offsetY === yLoc
+      )
+    ) {
+      isStatusLost.value = true
+      clearInterval(snakeMovingInterval)
+      return
+    }
+    if (pixelRows.value[prevY + offsetY][prevX + offsetX] === 'food') {
+      snakeLocations = [...snakeLocations, [prevX + offsetX, prevY + offsetY]]
+      randomPixelAsFood(gridSquareSize)
+    } else {
+      snakeLocations = [
+        ...snakeLocations.slice(1, snakeLocations.length),
+        [prevX + offsetX, prevY + offsetY]
+      ]
+    }
+    updateGrid(snakeLocations)
+  }, interval)
+}
 const moves = {
   w() {
     clearInterval(snakeMovingInterval)
-    snakeMovingInterval = setInterval(() => {
-      const [prevX, prevY] = snakeLocations[snakeLocations.length - 1]
-      if (
-        snakeLocations.some(
-          ([xLoc, yLoc]) => prevX === xLoc && prevY - 1 === yLoc
-        )
-      ) {
-        isStatusLost.value = true
-        clearInterval(snakeMovingInterval)
-        return
-      }
-      if (pixelRows.value[prevY - 1][prevX] === 'food') {
-        snakeLocations = [...snakeLocations, [prevX, prevY - 1]]
-        randomPixelAsFood(gridSquareSize)
-      } else {
-        snakeLocations = [
-          ...snakeLocations.slice(1, snakeLocations.length),
-          [prevX, prevY - 1]
-        ]
-      }
-      updateGrid(snakeLocations)
-    }, interval)
+    setSnakeInterval(0, -1)
   },
   s() {
     clearInterval(snakeMovingInterval)
-    snakeMovingInterval = setInterval(() => {
-      const [prevX, prevY] = snakeLocations[snakeLocations.length - 1]
-      if (
-        snakeLocations.some(
-          ([xLoc, yLoc]) => prevX === xLoc && prevY + 1 === yLoc
-        )
-      ) {
-        isStatusLost.value = true
-        clearInterval(snakeMovingInterval)
-        return
-      }
-      if (pixelRows.value[prevY + 1][prevX] === 'food') {
-        snakeLocations = [...snakeLocations, [prevX, prevY + 1]]
-        randomPixelAsFood(gridSquareSize)
-      } else {
-        snakeLocations = [
-          ...snakeLocations.slice(1, snakeLocations.length),
-          [prevX, prevY + 1]
-        ]
-      }
-      updateGrid(snakeLocations)
-    }, interval)
+    setSnakeInterval(0, 1)
   },
   a() {
     clearInterval(snakeMovingInterval)
-    snakeMovingInterval = setInterval(() => {
-      const [prevX, prevY] = snakeLocations[snakeLocations.length - 1]
-      if (
-        snakeLocations.some(
-          ([xLoc, yLoc]) => prevX - 1 === xLoc && prevY === yLoc
-        )
-      ) {
-        isStatusLost.value = true
-        clearInterval(snakeMovingInterval)
-        return
-      }
-      if (pixelRows.value[prevY][prevX - 1] === 'food') {
-        snakeLocations = [...snakeLocations, [prevX - 1, prevY]]
-        randomPixelAsFood(gridSquareSize)
-      } else {
-        snakeLocations = [
-          ...snakeLocations.slice(1, snakeLocations.length),
-          [prevX - 1, prevY]
-        ]
-      }
-      updateGrid(snakeLocations)
-    }, interval)
+    setSnakeInterval(-1, 0)
   },
   d() {
     clearInterval(snakeMovingInterval)
-    snakeMovingInterval = setInterval(() => {
-      const [prevX, prevY] = snakeLocations[snakeLocations.length - 1]
-      if (
-        snakeLocations.some(
-          ([xLoc, yLoc]) => prevX + 1 === xLoc && prevY === yLoc
-        )
-      ) {
-        isStatusLost.value = true
-        clearInterval(snakeMovingInterval)
-        return
-      }
-      if (pixelRows.value[prevY][prevX + 1] === 'food') {
-        snakeLocations = [...snakeLocations, [prevX + 1, prevY]]
-        randomPixelAsFood(gridSquareSize)
-      } else {
-        snakeLocations = [
-          ...snakeLocations.slice(1, snakeLocations.length),
-          [prevX + 1, prevY]
-        ]
-      }
-      updateGrid(snakeLocations)
-    }, interval)
+    setSnakeInterval(1, 0)
   }
 }
 
