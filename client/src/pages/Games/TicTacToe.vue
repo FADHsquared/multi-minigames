@@ -10,6 +10,7 @@ import type { Socket } from 'socket.io-client'
 import { useRouter } from 'vue-router'
 import { ref, inject, onUnmounted, watchEffect } from 'vue'
 import { X, Circle } from 'lucide-vue-next'
+import Modal from '../../components/Modal.vue'
 
 const router = useRouter()
 const socket = inject<Socket>('socket')
@@ -26,13 +27,15 @@ socket?.on('send-reset', () => {
 })
 
 const isOnlineMode = ref(!!props.room.length)
+function updateIsOnlineModeValue() {
+  isOnlineMode.value = !!props.room.length
+}
 watchEffect(() => {
   if (props.room.length) {
     socket?.connect()
     socket?.emit('request-join-room', props.room, (response: string) => {
       if (response === 'denied') {
-        alert('This room already has two players in it!')
-        router.replace('/games/tic-tac-toe')
+        showModal.value = true
       }
     })
   } else {
@@ -135,18 +138,16 @@ function handleFocusOut() {
 function handleRoomCodeSubmit() {
   if (roomCode.value.length) {
     isRequestingOnline.value = false
-    router.push(`/games/tic-tac-toe/${roomCode.value}`).then(() => {
-      isOnlineMode.value = !!props.room.length
-    })
+    router
+      .push(`/games/tic-tac-toe/${roomCode.value}`)
+      .then(updateIsOnlineModeValue)
     handleResetClick()
   }
 }
 
 function handleOfflineClick() {
   if (props.room.length) {
-    router.push('/games/tic-tac-toe').then(() => {
-      isOnlineMode.value = !!props.room.length
-    })
+    router.push('/games/tic-tac-toe').then(updateIsOnlineModeValue)
     handleResetClick()
   }
 }
@@ -155,9 +156,22 @@ onUnmounted(() => {
   socket?.off()
   socket?.disconnect()
 })
+
+const showModal = ref(false)
+function handleCloseModal() {
+  showModal.value = false
+  router.replace('/games/tic-tac-toe').then(updateIsOnlineModeValue)
+}
 </script>
 
 <template>
+  <Modal
+    v-if="showModal"
+    title="Room Join Error"
+    :handle-outside-area-click="handleCloseModal"
+  >
+    <p>This room already has two players in it!</p>
+  </Modal>
   <main class="flex-grow flex flex-col items-center justify-center gap-y-2">
     <p>Mode:</p>
     <div class="border-2 border-yellow-600 rounded-md">
