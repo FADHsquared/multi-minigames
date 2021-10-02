@@ -168,7 +168,7 @@ function handleCloseModal() {
   <Modal
     v-if="showModal"
     title="Room Join Error"
-    :handle-outside-area-click="handleCloseModal"
+    @outside-area-click="handleCloseModal"
   >
     <p>This room already has two players in it!</p>
   </Modal>

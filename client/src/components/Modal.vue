@@ -1,7 +1,7 @@
 <script setup lang="ts">
+defineEmits(['outside-area-click'])
 defineProps<{
   title: string
-  handleOutsideAreaClick: ((payload: MouseEvent) => void) | undefined
 }>()
 </script>
 
@@ -16,7 +16,7 @@ defineProps<{
       items-center
       justify-center
     "
-    @click.self="handleOutsideAreaClick"
+    @click.self="$emit('outside-area-click')"
   >
     <div
       class="
