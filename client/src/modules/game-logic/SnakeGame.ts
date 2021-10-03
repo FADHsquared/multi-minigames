@@ -4,6 +4,13 @@ type Point2D = [x: number, y: number]
 type PlayArea = (null | 'food' | 'snake')[][]
 
 class SnakeGame {
+  private readonly moveOffsetPairs: { [move: string]: Point2D } = {
+    left: [-1, 0],
+    right: [1, 0],
+    up: [0, -1],
+    down: [0, 1]
+  }
+
   private playArea: PlayArea
   private snakeLocations: Point2D[]
   private foodLocation: Point2D
@@ -79,25 +86,8 @@ class SnakeGame {
     if (!this.isLost) {
       clearInterval(this.continuousMoveIntervalID)
 
-      let offsetX = 0
-      let offsetY = 0
-      switch (to) {
-        case 'left':
-          offsetX = -1
-          break
-        case 'right':
-          offsetX = 1
-          break
-        case 'up':
-          offsetY = -1
-          break
-        case 'down':
-          offsetY = 1
-          break
-      }
-
       this.continuousMoveIntervalID = setInterval(() => {
-        this.walkSnakeBy(offsetX, offsetY)
+        this.walkSnakeBy(...this.moveOffsetPairs[to])
         onIntervalTick()
       }, this.snakeMovingInterval)
     }
