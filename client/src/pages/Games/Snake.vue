@@ -51,6 +51,7 @@ updateGrid(snakeLocations, true)
 function setSnakeInterval(offsetX: number, offsetY: number) {
   snakeMovingInterval = setInterval(() => {
     const [prevX, prevY] = snakeLocations[snakeLocations.length - 1]
+    const [prevFoodX, prevFoodY] = foodLocation
     let isRequiringNewFood = false
     if (
       snakeLocations.some(
@@ -61,7 +62,7 @@ function setSnakeInterval(offsetX: number, offsetY: number) {
       clearInterval(snakeMovingInterval)
       return
     }
-    if (pixelRows.value[prevY + offsetY][prevX + offsetX] === 'food') {
+    if (prevX + offsetX === prevFoodX && prevY + offsetY === prevFoodY) {
       snakeLocations = [...snakeLocations, [prevX + offsetX, prevY + offsetY]]
       isRequiringNewFood = true
     } else {
