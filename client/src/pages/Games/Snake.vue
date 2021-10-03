@@ -3,11 +3,14 @@ import { ref, onUnmounted } from 'vue'
 import { randomNumberFromZeroToMax } from '../../modules/game-logic/helper'
 
 const gridSquareSize = 17
-const pixelRows = ref(
-  Array.from({ length: gridSquareSize }, () =>
+
+function getNullArray() {
+  return Array.from({ length: gridSquareSize }, () =>
     new Array(gridSquareSize).fill(null)
   )
-)
+}
+
+const pixelRows = ref(getNullArray())
 
 function randomPixelAsFood(gridSize: number) {
   let randomY: number
@@ -19,29 +22,36 @@ function randomPixelAsFood(gridSize: number) {
     snakeLocations.some(([locX, locY]) => locX === randomX && locY === randomY)
   )
 
-  pixelRows.value[randomY][randomX] = 'food'
+  foodLocation = [randomX, randomY]
 }
 
 let snakeLocations: [x: number, y: number][] = [[1, 8]]
+let foodLocation: [x: number, y: number]
 randomPixelAsFood(gridSquareSize)
 
 let snakeMovingInterval: number
 const interval = 200
 const isStatusLost = ref(false)
 
-function updateGrid(snake: [x: number, y: number][]) {
-  pixelRows.value = pixelRows.value.map((pixelRow, rowIdx) =>
-    pixelRow.map((pixel, pixelIdx) => {
-      if (snake.some(([x, y]) => x === pixelIdx && y === rowIdx)) return 'snake'
-      if (pixel === 'food') return 'food'
-    })
-  )
+function updateGrid(
+  snake: [x: number, y: number][],
+  isRequiringNewFood: boolean
+) {
+  pixelRows.value = getNullArray()
+  snake.forEach(([x, y]) => {
+    pixelRows.value[y][x] = 'snake'
+  })
+  if (isRequiringNewFood) randomPixelAsFood(gridSquareSize)
+
+  const [foodX, foodY] = foodLocation
+  pixelRows.value[foodY][foodX] = 'food'
 }
-updateGrid(snakeLocations)
+updateGrid(snakeLocations, true)
 
 function setSnakeInterval(offsetX: number, offsetY: number) {
   snakeMovingInterval = setInterval(() => {
     const [prevX, prevY] = snakeLocations[snakeLocations.length - 1]
+    let isRequiringNewFood = false
     if (
       snakeLocations.some(
         ([xLoc, yLoc]) => prevX + offsetX === xLoc && prevY + offsetY === yLoc
@@ -53,14 +63,14 @@ function setSnakeInterval(offsetX: number, offsetY: number) {
     }
     if (pixelRows.value[prevY + offsetY][prevX + offsetX] === 'food') {
       snakeLocations = [...snakeLocations, [prevX + offsetX, prevY + offsetY]]
-      randomPixelAsFood(gridSquareSize)
+      isRequiringNewFood = true
     } else {
       snakeLocations = [
         ...snakeLocations.slice(1, snakeLocations.length),
         [prevX + offsetX, prevY + offsetY]
       ]
     }
-    updateGrid(snakeLocations)
+    updateGrid(snakeLocations, isRequiringNewFood)
   }, interval)
 }
 const moves = {
@@ -90,12 +100,9 @@ function handleKeydown(e: KeyboardEvent) {
 window.addEventListener('keydown', handleKeydown)
 
 function handleResetPress() {
-  pixelRows.value = Array.from({ length: gridSquareSize }, () =>
-    new Array(gridSquareSize).fill(null)
-  )
+  pixelRows.value = getNullArray()
   snakeLocations = [[1, 8]]
-  updateGrid(snakeLocations)
-  randomPixelAsFood(gridSquareSize)
+  updateGrid(snakeLocations, true)
   isStatusLost.value = false
 }
 
