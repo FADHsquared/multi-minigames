@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onUnmounted } from 'vue'
-import SnakeGame from '../../modules/game-logic/SnakeGame'
+import { SnakeGame } from '../../modules/game-logic/game-logic'
 
 const snakeGame = new SnakeGame(17)
 
