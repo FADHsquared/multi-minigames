@@ -2,6 +2,12 @@
 import type { PlayArea } from '../../modules/game-logic/game-logic'
 import { ref, onUnmounted } from 'vue'
 import { SnakeGame } from '../../modules/game-logic/game-logic'
+import {
+  ChevronUp,
+  ChevronLeft,
+  ChevronRight,
+  ChevronDown
+} from 'lucide-vue-next'
 
 const snakeGame = new SnakeGame(17)
 
@@ -25,7 +31,6 @@ const moves: { [key: string]: 'up' | 'down' | 'left' | 'right' } = {
 }
 
 function handleKeydown(e: KeyboardEvent) {
-  console.log(e.key)
   if (e.key in moves) {
     snakeGame.performContinuousMove(moves[e.key])
   }
@@ -35,6 +40,11 @@ window.addEventListener('keydown', handleKeydown)
 function handleResetPress() {
   snakeGame.resetPlayArea()
 }
+
+const isMobile =
+  /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent
+  )
 
 onUnmounted(() => {
   window.removeEventListener('keydown', handleKeydown)
@@ -68,6 +78,38 @@ onUnmounted(() => {
             'bg-gray-400': pixel === 'snake'
           }"
         ></div>
+      </div>
+    </div>
+    <div v-if="isMobile">
+      <div class="w-max mx-auto">
+        <button
+          class="border-2 border-gray-400"
+          @click="snakeGame.performContinuousMove('up')"
+        >
+          <ChevronUp />
+        </button>
+      </div>
+      <div class="flex gap-x-8 mb-1">
+        <button
+          class="border-2 border-gray-400"
+          @click="snakeGame.performContinuousMove('left')"
+        >
+          <ChevronLeft />
+        </button>
+        <button
+          class="border-2 border-gray-400"
+          @click="snakeGame.performContinuousMove('right')"
+        >
+          <ChevronRight />
+        </button>
+      </div>
+      <div class="w-max mx-auto">
+        <button
+          class="border-2 border-gray-400"
+          @click="snakeGame.performContinuousMove('down')"
+        >
+          <ChevronDown />
+        </button>
       </div>
     </div>
   </main>
