@@ -17,13 +17,13 @@ const contributionMethods = [
     name: 'JavaScript code',
     icon: Code2,
     description:
-      "Submit a PR or contact us on Discord and we'll convert it to a Vue game and add it to this site."
+      'Submit a PR or contact us on Discord. We recommend sending us a framework-agnostic module for your game.'
   },
   {
     name: 'Vue code',
     icon: Zap,
     description:
-      'This is the fastest way you can get your game up and running on this site! A good PR can be swiftly merged by us.'
+      'This is the fastest method: Submit a framework-agnostic module along with a Vue implementation example.'
   }
 ]
 </script>
