@@ -14,11 +14,11 @@
     "vue-router": "^4.0.11"
   },
   "devDependencies": {
-    "@tailwindcss/forms": "^0.3.3",
     "@typescript-eslint/eslint-plugin": "^4.32.0",
     "@typescript-eslint/parser": "^4.31.2",
     "@vitejs/plugin-vue": "^1.9.0",
     "autoprefixer": "^10.3.5",
+    "daisyui": "^1.14.2",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-vue": "^7.18.0",
