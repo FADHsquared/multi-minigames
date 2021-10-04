@@ -83,21 +83,21 @@ onUnmounted(() => {
     <div v-if="isMobile">
       <div class="w-max mx-auto">
         <button
-          class="border-2 border-gray-400"
+          class="border-2 border-gray-400 p-2"
           @click="snakeGame.performContinuousMove('up')"
         >
           <ChevronUp />
         </button>
       </div>
-      <div class="flex gap-x-8 mb-1">
+      <div class="flex gap-x-11">
         <button
-          class="border-2 border-gray-400"
+          class="border-2 border-gray-400 p-2"
           @click="snakeGame.performContinuousMove('left')"
         >
           <ChevronLeft />
         </button>
         <button
-          class="border-2 border-gray-400"
+          class="border-2 border-gray-400 p-2"
           @click="snakeGame.performContinuousMove('right')"
         >
           <ChevronRight />
@@ -105,7 +105,7 @@ onUnmounted(() => {
       </div>
       <div class="w-max mx-auto">
         <button
-          class="border-2 border-gray-400"
+          class="border-2 border-gray-400 p-2"
           @click="snakeGame.performContinuousMove('down')"
         >
           <ChevronDown />
