@@ -17,10 +17,15 @@ const moves: { [key: string]: 'up' | 'down' | 'left' | 'right' } = {
   w: 'up',
   s: 'down',
   a: 'left',
-  d: 'right'
+  d: 'right',
+  ArrowUp: 'up',
+  ArrowDown: 'down',
+  ArrowLeft: 'left',
+  ArrowRight: 'right'
 }
 
 function handleKeydown(e: KeyboardEvent) {
+  console.log(e.key)
   if (e.key in moves) {
     snakeGame.performContinuousMove(moves[e.key])
   }
