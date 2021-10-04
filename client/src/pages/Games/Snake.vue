@@ -62,9 +62,11 @@ onUnmounted(() => {
         Reset
       </button>
     </p>
-    <div class="border-4 border-yellow-600 rounded-xl p-2 flex flex-col">
+    <div
+      v-if="pixelRows"
+      class="border-4 border-yellow-600 rounded-xl p-2 flex flex-col"
+    >
       <div
-        v-if="pixelRows"
         v-for="(pixelRow, pixelRowIdx) in pixelRows"
         :key="pixelRowIdx"
         class="flex"
