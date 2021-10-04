@@ -1,11 +1,17 @@
 <script setup lang="ts">
+import type { PlayArea } from '../../modules/game-logic/game-logic'
 import { ref, onUnmounted } from 'vue'
 import { SnakeGame } from '../../modules/game-logic/game-logic'
 
 const snakeGame = new SnakeGame(17)
 
-const pixelRows = ref(snakeGame.getPlayArea())
-const isStatusLost = ref(snakeGame.getIsLost())
+const pixelRows = ref<null | PlayArea>(null)
+const isStatusLost = ref<null | boolean>(null)
+
+snakeGame.onUpdateEvents(() => {
+  pixelRows.value = snakeGame.getPlayArea()
+  isStatusLost.value = snakeGame.getIsLost()
+})
 
 const moves: { [key: string]: 'up' | 'down' | 'left' | 'right' } = {
   w: 'up',
@@ -16,18 +22,13 @@ const moves: { [key: string]: 'up' | 'down' | 'left' | 'right' } = {
 
 function handleKeydown(e: KeyboardEvent) {
   if (e.key in moves) {
-    snakeGame.performContinuousMove(moves[e.key], () => {
-      pixelRows.value = snakeGame.getPlayArea()
-      isStatusLost.value = snakeGame.getIsLost()
-    })
+    snakeGame.performContinuousMove(moves[e.key])
   }
 }
 window.addEventListener('keydown', handleKeydown)
 
 function handleResetPress() {
   snakeGame.resetPlayArea()
-  pixelRows.value = snakeGame.getPlayArea()
-  isStatusLost.value = snakeGame.getIsLost()
 }
 
 onUnmounted(() => {
@@ -48,6 +49,7 @@ onUnmounted(() => {
     </p>
     <div class="border-4 border-yellow-600 rounded-xl p-2 flex flex-col">
       <div
+        v-if="pixelRows"
         v-for="(pixelRow, pixelRowIdx) in pixelRows"
         :key="pixelRowIdx"
         class="flex"

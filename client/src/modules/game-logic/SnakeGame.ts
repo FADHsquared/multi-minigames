@@ -15,6 +15,7 @@ class SnakeGame {
   private snakeLocations: Point2D[]
   private foodLocation: Point2D
   private continuousMoveIntervalID: number | undefined
+  private onUpdateEventsCB: (() => void) | undefined
   private isLost = false
 
   constructor(
@@ -71,6 +72,11 @@ class SnakeGame {
     this.updatePlayArea(willRequireNewFood)
   }
 
+  onUpdateEvents(cb: () => void): void {
+    this.onUpdateEventsCB = cb
+    this.onUpdateEventsCB?.()
+  }
+
   getPlayArea(): PlayArea {
     return this.playArea
   }
@@ -79,16 +85,13 @@ class SnakeGame {
     return this.isLost
   }
 
-  performContinuousMove(
-    to: 'left' | 'right' | 'up' | 'down',
-    onIntervalTick: () => void
-  ): void {
+  performContinuousMove(to: 'left' | 'right' | 'up' | 'down'): void {
     if (!this.isLost) {
       clearInterval(this.continuousMoveIntervalID)
 
       this.continuousMoveIntervalID = setInterval(() => {
         this.walkSnakeBy(...this.moveOffsetPairs[to])
-        onIntervalTick()
+        this.onUpdateEventsCB?.()
       }, this.snakeMovingInterval)
     }
   }
@@ -98,6 +101,8 @@ class SnakeGame {
     this.snakeLocations = [[1, Math.round((this.playAreaSize - 1) / 2)]]
     this.updatePlayArea(true)
     this.isLost = false
+
+    this.onUpdateEventsCB?.()
   }
 
   close(): void {
@@ -106,3 +111,4 @@ class SnakeGame {
 }
 
 export default SnakeGame
+export type { PlayArea }
