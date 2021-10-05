@@ -55,15 +55,12 @@ onUnmounted(() => {
 <template>
   <main class="flex-grow flex flex-col items-center justify-center gap-y-2">
     <p v-if="isStatusLost">
-      You hit yourself!<button
-        class="border-2 border-yellow-600 rounded"
-        @click="handleResetPress"
-      >
+      You hit yourself!<button class="btn ml-1.5" @click="handleResetPress">
         Reset
       </button>
     </p>
     <div v-if="pixelRows" class="card bordered">
-      <div class="card-body">
+      <div class="card-body p-3">
         <div
           v-for="(pixelRow, pixelRowIdx) in pixelRows"
           :key="pixelRowIdx"
@@ -80,34 +77,22 @@ onUnmounted(() => {
           ></div>
         </div>
       </div>
-      <div v-if="isMobile">
+      <div v-if="isMobile" class="w-max mx-auto">
         <div class="w-max mx-auto">
-          <button
-            class="border-2 border-gray-400 p-2"
-            @click="snakeGame.performContinuousMove('up')"
-          >
+          <button class="btn" @click="snakeGame.performContinuousMove('up')">
             <ChevronUp />
           </button>
         </div>
-        <div class="flex gap-x-11">
-          <button
-            class="border-2 border-gray-400 p-2"
-            @click="snakeGame.performContinuousMove('left')"
-          >
+        <div class="flex gap-x-10">
+          <button class="btn" @click="snakeGame.performContinuousMove('left')">
             <ChevronLeft />
           </button>
-          <button
-            class="border-2 border-gray-400 p-2"
-            @click="snakeGame.performContinuousMove('right')"
-          >
+          <button class="btn" @click="snakeGame.performContinuousMove('right')">
             <ChevronRight />
           </button>
         </div>
         <div class="w-max mx-auto">
-          <button
-            class="border-2 border-gray-400 p-2"
-            @click="snakeGame.performContinuousMove('down')"
-          >
+          <button class="btn" @click="snakeGame.performContinuousMove('down')">
             <ChevronDown />
           </button>
         </div>
