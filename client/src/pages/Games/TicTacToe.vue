@@ -207,11 +207,11 @@ function handleCloseModal() {
       </form>
     </div>
     <p v-if="winner">{{ winner }} won!</p>
-    <div class="w-max divide-y-2 divide-gray-400">
+    <div class="w-max divide-y-2 divide-base-300">
       <div
         v-for="(row, rowIdx) in board"
         :key="rowIdx"
-        class="divide-x-2 divide-gray-400"
+        class="divide-x-2 divide-base-300"
       >
         <button
           v-for="(entry, entryIdx) in row"
