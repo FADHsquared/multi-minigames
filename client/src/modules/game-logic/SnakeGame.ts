@@ -58,8 +58,15 @@ class SnakeGame {
 
     const nextX = prevX + offsetX
     const nextY = prevY + offsetY
+    console.log(nextX)
 
-    if (this.snakeLocations.some(([x, y]) => x === nextX && y === nextY)) {
+    if (
+      this.snakeLocations.some(([x, y]) => x === nextX && y === nextY) ||
+      nextX === -1 ||
+      nextX === this.playAreaSize ||
+      nextY === -1 ||
+      nextY === this.playAreaSize
+    ) {
       this.isLost = true
       clearInterval(this.continuousMoveIntervalID)
       return

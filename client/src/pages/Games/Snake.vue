@@ -55,7 +55,7 @@ onUnmounted(() => {
 <template>
   <main class="flex-grow flex flex-col items-center justify-center gap-y-2">
     <p v-if="isStatusLost">
-      You hit yourself!<button class="btn ml-1.5" @click="handleResetPress">
+      You died!<button class="btn ml-1.5" @click="handleResetPress">
         Reset
       </button>
     </p>
