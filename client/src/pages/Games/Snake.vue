@@ -69,10 +69,10 @@ onUnmounted(() => {
           <div
             v-for="(pixel, pixelIdx) in pixelRow"
             :key="pixelIdx"
-            class="w-4 h-4 rounded border-2 border-gray-400/10"
+            class="w-4 h-4 rounded border-2 border-base-200/30"
             :class="{
-              'bg-gray-300': pixel === 'food',
-              'bg-gray-400': pixel === 'snake'
+              'border-none bg-error': pixel === 'food',
+              'border-none bg-primary': pixel === 'snake'
             }"
           ></div>
         </div>
