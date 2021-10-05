@@ -15,7 +15,7 @@ function useDaisyUIDarkMode(): [Ref<string | null>, () => void] {
     const htmlElement = document.getElementsByTagName('html')[0]
     htmlElement.setAttribute(
       'data-theme',
-      isDarkModeString.value === 'true' ? 'dark' : 'light'
+      isDarkModeString.value === 'true' ? 'dark' : 'garden'
     )
   })
 
