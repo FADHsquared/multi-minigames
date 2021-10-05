@@ -40,16 +40,17 @@ const contributionMethods = [
     <img
       src="../assets/koddl-io-screenshot.png"
       alt="koddl.io"
-      class="rounded-box"
+      class="rounded-t-box sm:rounded-box"
     />
     <div
       class="
         card
+        rounded-t-none
+        sm:rounded-t-box
         bg-secondary
         text-accent-content
         shadow
-        absolute
-        bottom-3
+        sm:absolute sm:bottom-3
         left-1/2
         -translate-x-1/2
       "
