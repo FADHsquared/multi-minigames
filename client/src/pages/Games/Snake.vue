@@ -62,56 +62,55 @@ onUnmounted(() => {
         Reset
       </button>
     </p>
-    <div
-      v-if="pixelRows"
-      class="border-4 border-yellow-600 rounded-xl p-2 flex flex-col"
-    >
-      <div
-        v-for="(pixelRow, pixelRowIdx) in pixelRows"
-        :key="pixelRowIdx"
-        class="flex"
-      >
+    <div v-if="pixelRows" class="card bordered">
+      <div class="card-body">
         <div
-          v-for="(pixel, pixelIdx) in pixelRow"
-          :key="pixelIdx"
-          class="w-4 h-4 rounded border-2 border-gray-400/10"
-          :class="{
-            'bg-gray-300': pixel === 'food',
-            'bg-gray-400': pixel === 'snake'
-          }"
-        ></div>
+          v-for="(pixelRow, pixelRowIdx) in pixelRows"
+          :key="pixelRowIdx"
+          class="flex"
+        >
+          <div
+            v-for="(pixel, pixelIdx) in pixelRow"
+            :key="pixelIdx"
+            class="w-4 h-4 rounded border-2 border-gray-400/10"
+            :class="{
+              'bg-gray-300': pixel === 'food',
+              'bg-gray-400': pixel === 'snake'
+            }"
+          ></div>
+        </div>
       </div>
-    </div>
-    <div v-if="isMobile">
-      <div class="w-max mx-auto">
-        <button
-          class="border-2 border-gray-400 p-2"
-          @click="snakeGame.performContinuousMove('up')"
-        >
-          <ChevronUp />
-        </button>
-      </div>
-      <div class="flex gap-x-11">
-        <button
-          class="border-2 border-gray-400 p-2"
-          @click="snakeGame.performContinuousMove('left')"
-        >
-          <ChevronLeft />
-        </button>
-        <button
-          class="border-2 border-gray-400 p-2"
-          @click="snakeGame.performContinuousMove('right')"
-        >
-          <ChevronRight />
-        </button>
-      </div>
-      <div class="w-max mx-auto">
-        <button
-          class="border-2 border-gray-400 p-2"
-          @click="snakeGame.performContinuousMove('down')"
-        >
-          <ChevronDown />
-        </button>
+      <div v-if="isMobile">
+        <div class="w-max mx-auto">
+          <button
+            class="border-2 border-gray-400 p-2"
+            @click="snakeGame.performContinuousMove('up')"
+          >
+            <ChevronUp />
+          </button>
+        </div>
+        <div class="flex gap-x-11">
+          <button
+            class="border-2 border-gray-400 p-2"
+            @click="snakeGame.performContinuousMove('left')"
+          >
+            <ChevronLeft />
+          </button>
+          <button
+            class="border-2 border-gray-400 p-2"
+            @click="snakeGame.performContinuousMove('right')"
+          >
+            <ChevronRight />
+          </button>
+        </div>
+        <div class="w-max mx-auto">
+          <button
+            class="border-2 border-gray-400 p-2"
+            @click="snakeGame.performContinuousMove('down')"
+          >
+            <ChevronDown />
+          </button>
+        </div>
       </div>
     </div>
   </main>

@@ -174,36 +174,38 @@ function handleCloseModal() {
   </Modal>
   <main class="flex-grow flex flex-col items-center justify-center gap-y-2">
     <p>Mode:</p>
-    <div class="border-2 border-yellow-600 rounded-md">
+    <div class="btn-group">
       <button
-        :class="{ 'font-bold': !isOnlineMode }"
-        class="mx-1"
+        :class="{ 'btn-active': !isOnlineMode }"
+        class="btn"
         @click="handleOfflineClick"
       >
         Offline
       </button>
       <button
-        :class="{ 'font-bold': isOnlineMode }"
-        class="mx-1"
+        :class="{ 'btn-active': isOnlineMode }"
+        class="btn"
         @click="handleOnlineClick"
       >
         Online
       </button>
     </div>
-    <form
-      v-show="isRequestingOnline"
-      class="p-2 pt-0.5 border-2 border-yellow-600 rounded-md"
-      @submit.prevent="handleRoomCodeSubmit"
-    >
-      <p>Enter a room code, press enter to go:</p>
-      <input
-        ref="roomCodeInputRef"
-        v-model="roomCode"
-        type="text"
-        class="dark:bg-gray-900 w-full"
-        @focusout="handleFocusOut"
-      />
-    </form>
+    <div class="card bg-base-200">
+      <form
+        v-show="isRequestingOnline"
+        class="card-body form-control"
+        @submit.prevent="handleRoomCodeSubmit"
+      >
+        <p>Enter a room code, press enter to go:</p>
+        <input
+          ref="roomCodeInputRef"
+          v-model="roomCode"
+          type="text"
+          class="input w-full"
+          @focusout="handleFocusOut"
+        />
+      </form>
+    </div>
     <p v-if="winner">{{ winner }} won!</p>
     <div class="w-max divide-y-2 divide-gray-400">
       <div
@@ -217,16 +219,11 @@ function handleCloseModal() {
           class="align-bottom w-20 h-20 inline-flex items-center justify-center"
           @click="handleEntryClick(rowIdx, entryIdx)"
         >
-          <Circle v-if="entry === 'o'" size="36" />
-          <X v-if="entry === 'x'" size="36" />
+          <Circle v-if="entry === 'o'" :size="36" />
+          <X v-if="entry === 'x'" :size="36" />
         </button>
       </div>
     </div>
-    <button
-      class="px-1 border-2 border-yellow-600 rounded-md active:bg-blue-600/25"
-      @click="handleResetClick"
-    >
-      Reset Board
-    </button>
+    <button class="btn" @click="handleResetClick">Reset Board</button>
   </main>
 </template>

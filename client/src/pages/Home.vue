@@ -34,23 +34,27 @@ const contributionMethods = [
     A collection of small games, playable offline or online.
   </p>
   <h2 class="my-2.5 text-center text-3xl font-semibold">Contribute</h2>
-  <div class="flex flex-col sm:flex-row gap-y-4 max-w-xs sm:max-w-5xl mx-auto">
+  <div
+    class="
+      flex flex-col
+      sm:flex-row
+      gap-y-4 gap-x-2
+      max-w-xs
+      sm:max-w-5xl
+      mx-auto
+      px-2
+    "
+  >
     <div
       v-for="contributionMethod in contributionMethods"
       :key="contributionMethod.name"
-      class="
-        flex-1
-        border-4 border-yellow-600
-        rounded-xl
-        flex flex-col
-        items-center
-        p-2
-        mx-2
-      "
+      class="card bordered"
     >
-      <component :is="contributionMethod.icon" class="my-1" />
-      <p class="font-semibold text-lg">{{ contributionMethod.name }}</p>
-      <p class="text-justify">{{ contributionMethod.description }}</p>
+      <div class="card-body flex flex-col items-center">
+        <component :is="contributionMethod.icon" />
+        <p class="card-title">{{ contributionMethod.name }}</p>
+        <p class="text-justify">{{ contributionMethod.description }}</p>
+      </div>
     </div>
   </div>
 </template>
