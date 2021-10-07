@@ -2,6 +2,7 @@ import { get2DArrayOf, random2DPointInArea } from './helper'
 import type { Point2D } from './game-logic'
 
 type PlayArea = (null | 'food' | 'snake')[][]
+type SnakeMove = 'left' | 'right' | 'up' | 'down'
 
 class SnakeGame {
   private readonly moveOffsetPairs: { [move: string]: Point2D } = {
@@ -16,6 +17,7 @@ class SnakeGame {
   private foodLocation: Point2D
   private continuousMoveIntervalID: number | undefined
   private onUpdateEventsCB: (() => void) | undefined
+  private previousMove: null | SnakeMove = null
   private isLost = false
 
   constructor(
@@ -88,9 +90,10 @@ class SnakeGame {
     return this.isLost
   }
 
-  performContinuousMove(to: 'left' | 'right' | 'up' | 'down'): void {
-    if (!this.isLost) {
+  performContinuousMove(to: SnakeMove): void {
+    if (!this.isLost && this.previousMove !== to) {
       clearInterval(this.continuousMoveIntervalID)
+      this.previousMove = to
 
       this.continuousMoveIntervalID = setInterval(() => {
         this.walkSnakeBy(...this.moveOffsetPairs[to])
