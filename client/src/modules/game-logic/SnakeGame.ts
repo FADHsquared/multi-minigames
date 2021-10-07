@@ -1,6 +1,6 @@
-import { get2DArrayOf, randomNumberFromZeroToMax } from './helper'
+import { get2DArrayOf, random2DPointInArea } from './helper'
+import type { Point2D } from './game-logic'
 
-type Point2D = [x: number, y: number]
 type PlayArea = (null | 'food' | 'snake')[][]
 
 class SnakeGame {
@@ -29,15 +29,11 @@ class SnakeGame {
   }
 
   private getRandomFoodPoint(): Point2D {
-    let randomX: number, randomY: number
-    do {
-      randomX = randomNumberFromZeroToMax(this.playAreaSize - 1)
-      randomY = randomNumberFromZeroToMax(this.playAreaSize - 1)
-    } while (
-      this.snakeLocations.some(([x, y]) => x === randomX && y === randomY)
+    return random2DPointInArea(
+      this.playAreaSize,
+      this.playAreaSize,
+      this.snakeLocations
     )
-
-    return [randomX, randomY]
   }
 
   private updatePlayArea(isRequiringNewFood: boolean) {
