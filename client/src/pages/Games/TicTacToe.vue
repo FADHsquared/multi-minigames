@@ -166,11 +166,11 @@ function handleCloseModal() {
 
 <template>
   <Modal
-    v-if="showModal"
     title="Room Join Error"
+    :is-open="showModal"
     @outside-area-click="handleCloseModal"
   >
-    <p>This room already has two players in it!</p>
+    <p class="text-center">This room already has two players in it!</p>
   </Modal>
   <main class="flex-grow flex flex-col items-center justify-center gap-y-2">
     <p>Mode:</p>
