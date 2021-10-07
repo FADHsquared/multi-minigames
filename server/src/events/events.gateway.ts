@@ -15,7 +15,7 @@ import { Socket, Server } from 'socket.io'
 
 @WebSocketGateway({
   cors: {
-    origin: ['http://localhost', 'https://multi-minigames.herokuapp.com'],
+    origin: 'https://multi-minigames.herokuapp.com',
     methods: ['GET', 'POST']
   },
   serveClient: false
