@@ -14,7 +14,10 @@ import { Logger } from '@nestjs/common'
 import { Socket, Server } from 'socket.io'
 
 @WebSocketGateway({
-  cors: { origin: 'http://localhost', methods: ['GET', 'POST'] },
+  cors: {
+    origin: ['http://localhost', 'https://multi-minigames.herokuapp.com'],
+    methods: ['GET', 'POST']
+  },
   serveClient: false
 })
 export class EventsGateway
