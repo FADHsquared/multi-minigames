@@ -14,12 +14,12 @@ import { Logger } from '@nestjs/common'
 import { Socket, Server } from 'socket.io'
 
 @WebSocketGateway({
-  allowEIO3: true,
   cors: {
     origin: 'http://localhost',
     methods: ['GET', 'POST']
   },
-  serveClient: false
+  serveClient: false,
+  transports: ['websocket', 'polling']
 })
 export class EventsGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
