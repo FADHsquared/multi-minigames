@@ -18,8 +18,7 @@ import { Socket, Server } from 'socket.io'
     origin: 'http://localhost',
     methods: ['GET', 'POST']
   },
-  serveClient: false,
-  transports: ['websocket', 'polling']
+  serveClient: false
 })
 export class EventsGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
