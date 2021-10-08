@@ -7,7 +7,7 @@ import router from './router'
 import './index.css'
 
 const socketIOVueOpts: SocketIOVueOpts = {
-  uri: `:${import.meta.env.VITE_SIO_PORT}`,
+  uri: import.meta.env.VITE_SIO_PORT ? `:${import.meta.env.VITE_SIO_PORT}` : '',
   opts: {
     autoConnect: false
   }
