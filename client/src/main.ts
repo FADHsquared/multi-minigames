@@ -7,7 +7,7 @@ import router from './router'
 import './index.css'
 
 const socketIOVueOpts: SocketIOVueOpts = {
-  uri: ':3000',
+  uri: `:${process.env.PORT}`,
   opts: {
     autoConnect: false
   }
