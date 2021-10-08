@@ -14,6 +14,7 @@ import { Logger } from '@nestjs/common'
 import { Socket, Server } from 'socket.io'
 
 @WebSocketGateway({
+  allowEIO3: true,
   cors: {
     origin: 'http://localhost',
     methods: ['GET', 'POST']
