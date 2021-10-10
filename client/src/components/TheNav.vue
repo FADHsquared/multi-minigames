@@ -22,7 +22,7 @@ const links = [
 
 <template>
   <nav class="navbar bg-base-200">
-    <ul class="flex-grow mx-2 gap-x-3">
+    <ul class="flex-grow mx-2 gap-x-4">
       <li v-for="link in links" :key="link.name" class="link-hover">
         <router-link :to="link.to" exact-active-class="font-bold">{{
           link.name

@@ -45,11 +45,11 @@ const contributionMethods = [
     <div
       class="
         card
+        bordered
         rounded-t-none
         sm:rounded-t-box
         bg-secondary
         text-accent-content
-        shadow
         sm:absolute sm:bottom-3
         left-1/2
         -translate-x-1/2

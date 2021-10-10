@@ -23,7 +23,7 @@ async function getLeaderboard(top: number) {
   leaderboard.value = response.data
 }
 watchEffect(() => {
-  getLeaderboard(showTop.value)
+  if (showTop.value >= 1) getLeaderboard(showTop.value)
 })
 </script>
 
@@ -35,17 +35,17 @@ watchEffect(() => {
       v-model="showTop"
       type="number"
       min="1"
-      class="input input-primary"
+      class="input input-primary ml-2"
     />
   </p>
   <div
     v-if="leaderboard"
-    class="container self-center px-4 flex flex-col gap-y-4"
+    class="container self-center px-4 mb-4 flex flex-col gap-y-4"
   >
     <div
       v-for="player in leaderboard.data"
       :key="player.name"
-      class="card bordered"
+      class="card bg-base-200"
     >
       <div class="card-body">
         <h2 class="card-title">{{ player.name }}</h2>
