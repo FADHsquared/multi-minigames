@@ -29,7 +29,12 @@ watchEffect(() => {
   <h1 class="my-6 text-center text-4xl font-semibold">Leaderboard</h1>
   <p class="self-center mb-4">
     Show top:
-    <input v-model="showTop" type="number" class="input input-primary" />
+    <input
+      v-model="showTop"
+      type="number"
+      min="1"
+      class="input input-primary"
+    />
   </p>
   <div
     v-if="leaderboard"
