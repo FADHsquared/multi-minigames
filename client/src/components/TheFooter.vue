@@ -35,12 +35,22 @@ const technologies = [
       >
     </div>
     <div>
+      <span class="footer-title">Social Media</span>
+      <a
+        href="https://github.com/FADHsquared"
+        class="link link-hover"
+        target="_blank"
+        >GitHub</a
+      >
+    </div>
+    <div>
       <span class="footer-title">Technologies</span>
       <div class="mb-3 flex justify-center gap-x-1.5">
         <a
           v-for="technology in technologies"
           :key="technology.href"
           :href="technology.href"
+          target="_blank"
         >
           <img
             :src="technology.logoSrc"

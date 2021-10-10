@@ -172,7 +172,16 @@ function handleCloseModal() {
   >
     <p class="text-center">This room already has two players in it!</p>
   </Modal>
-  <main class="flex-grow flex flex-col items-center justify-center gap-y-2">
+  <main
+    class="
+      mt-1.5
+      my-3
+      flex-grow flex flex-col
+      items-center
+      justify-center
+      gap-y-2
+    "
+  >
     <p>Mode:</p>
     <div class="btn-group">
       <button
@@ -224,6 +233,6 @@ function handleCloseModal() {
         </button>
       </div>
     </div>
-    <button class="btn" @click="handleResetClick">Reset Board</button>
+    <button class="btn mt-1.5" @click="handleResetClick">Reset Board</button>
   </main>
 </template>

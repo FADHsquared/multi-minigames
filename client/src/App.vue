@@ -9,6 +9,6 @@ import TheFooter from './components/TheFooter.vue'
     <div class="flex-1 flex flex-col">
       <router-view />
     </div>
-    <TheFooter />
   </div>
+  <TheFooter />
 </template>

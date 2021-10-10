@@ -53,7 +53,16 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <main class="flex-grow flex flex-col items-center justify-center gap-y-2">
+  <main
+    class="
+      mt-2
+      mb-3
+      flex-grow flex flex-col
+      items-center
+      justify-center
+      gap-y-2
+    "
+  >
     <p v-if="isStatusLost">
       You died!<button class="btn ml-1.5" @click="handleResetPress">
         Reset
@@ -76,25 +85,34 @@ onUnmounted(() => {
             }"
           ></div>
         </div>
-      </div>
-      <div v-if="isMobile" class="w-max mx-auto">
-        <div class="w-max mx-auto">
-          <button class="btn" @click="snakeGame.performContinuousMove('up')">
-            <ChevronUp />
-          </button>
-        </div>
-        <div class="flex gap-x-10">
-          <button class="btn" @click="snakeGame.performContinuousMove('left')">
-            <ChevronLeft />
-          </button>
-          <button class="btn" @click="snakeGame.performContinuousMove('right')">
-            <ChevronRight />
-          </button>
-        </div>
-        <div class="w-max mx-auto">
-          <button class="btn" @click="snakeGame.performContinuousMove('down')">
-            <ChevronDown />
-          </button>
+        <div v-if="isMobile" class="mt-3 w-max mx-auto">
+          <div class="w-max mx-auto">
+            <button class="btn" @click="snakeGame.performContinuousMove('up')">
+              <ChevronUp />
+            </button>
+          </div>
+          <div class="flex gap-x-10">
+            <button
+              class="btn"
+              @click="snakeGame.performContinuousMove('left')"
+            >
+              <ChevronLeft />
+            </button>
+            <button
+              class="btn"
+              @click="snakeGame.performContinuousMove('right')"
+            >
+              <ChevronRight />
+            </button>
+          </div>
+          <div class="w-max mx-auto">
+            <button
+              class="btn"
+              @click="snakeGame.performContinuousMove('down')"
+            >
+              <ChevronDown />
+            </button>
+          </div>
         </div>
       </div>
     </div>
