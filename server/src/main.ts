@@ -12,6 +12,7 @@ async function bootstrap() {
     AppModule,
     new FastifyAdapter()
   )
+  app.enableCors({ origin: 'http://localhost', methods: ['GET', 'POST'] })
   const configService = app.get(ConfigService)
 
   await app.listen(configService.get('PORT') || 3000, '0.0.0.0')

@@ -3,18 +3,30 @@ import { Moon, Sun } from 'lucide-vue-next'
 import useDaisyUIDarkMode from '../composables/useDaisyUIDarkMode'
 
 const [isDarkModeString, toggleDarkMode] = useDaisyUIDarkMode()
+
+const links = [
+  {
+    to: '/',
+    name: 'Home'
+  },
+  {
+    to: '/games',
+    name: 'Games'
+  },
+  {
+    to: '/leaderboard',
+    name: 'Leaderboard'
+  }
+]
 </script>
 
 <template>
   <nav class="navbar bg-base-200">
     <ul class="flex-grow mx-2 gap-x-3">
-      <li class="link-hover">
-        <router-link to="/" exact-active-class="font-bold">Home</router-link>
-      </li>
-      <li class="link-hover">
-        <router-link to="/games" exact-active-class="font-bold">
-          Games
-        </router-link>
+      <li v-for="link in links" :key="link.name" class="link-hover">
+        <router-link :to="link.to" exact-active-class="font-bold">{{
+          link.name
+        }}</router-link>
       </li>
     </ul>
     <div class="gap-x-2">

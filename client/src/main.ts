@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import { createHead } from '@vueuse/head'
 import App from './App.vue'
 import socketIOVue, { SocketIOVueOpts } from './plugins/socket.io-vue'
+import axiosVue from './plugins/axios-vue'
 
 import router from './router'
 import './index.css'
@@ -17,4 +18,5 @@ createApp(App)
   .use(createHead())
   .use(router)
   .use(socketIOVue, socketIOVueOpts)
+  .use(axiosVue)
   .mount('#app')

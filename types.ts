@@ -3,3 +3,10 @@ export interface TicTacToeTurnPayload {
   position: [number, number]
   toRoom: string
 }
+
+export interface LeaderboardJSON {
+  data: {
+    name: string
+    points: number
+  }[]
+}
