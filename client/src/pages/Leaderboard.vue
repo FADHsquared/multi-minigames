@@ -9,8 +9,10 @@ const leaderboard = ref<LeaderboardJSON | null>(null)
 const showTop = ref(5)
 async function getLeaderboard(top: number) {
   const response = await axios.get(
-    `http://localhost${
-      import.meta.env.VITE_SIO_PORT ? `:${import.meta.env.VITE_SIO_PORT}` : ``
+    `http${
+      import.meta.env.VITE_SIO_PORT
+        ? `://localhost:${import.meta.env.VITE_SIO_PORT}`
+        : `s://multi-minigames.herokuapp.com`
     }/api/leaderboard`,
     {
       params: {
