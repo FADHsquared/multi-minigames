@@ -1,24 +1,36 @@
 <script setup lang="ts">
-import { inject, ref } from 'vue'
+import { inject, ref, watchEffect } from 'vue'
 import type { Axios } from 'axios'
 import type { LeaderboardJSON } from '../../../types'
 
 const axios = inject('axios') as Axios
 
 const leaderboard = ref<LeaderboardJSON | null>(null)
-async function getLeaderboard() {
+const showTop = ref(5)
+async function getLeaderboard(top: number) {
   const response = await axios.get(
     `http://localhost${
       import.meta.env.VITE_SIO_PORT ? `:${import.meta.env.VITE_SIO_PORT}` : ``
-    }/api/leaderboard`
+    }/api/leaderboard`,
+    {
+      params: {
+        top
+      }
+    }
   )
   leaderboard.value = response.data
 }
-getLeaderboard()
+watchEffect(() => {
+  getLeaderboard(showTop.value)
+})
 </script>
 
 <template>
   <h1 class="my-6 text-center text-4xl font-semibold">Leaderboard</h1>
+  <p class="self-center mb-4">
+    Show top:
+    <input v-model="showTop" type="number" class="input input-primary" />
+  </p>
   <div
     v-if="leaderboard"
     class="container self-center px-4 flex flex-col gap-y-4"
