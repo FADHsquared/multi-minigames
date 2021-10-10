@@ -27,6 +27,11 @@ const routes: RouteRecordRaw[] = [
     path: '/leaderboard',
     name: 'Leaderboard',
     component: () => import('../pages/Leaderboard.vue')
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: () => import('../pages/404.vue')
   }
 ]
 
