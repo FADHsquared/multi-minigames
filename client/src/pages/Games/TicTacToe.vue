@@ -13,16 +13,16 @@ import { X, Circle } from 'lucide-vue-next'
 import Modal from '../../components/Modal.vue'
 
 const router = useRouter()
-const socket = inject<Socket>('socket')
+const socket = inject('socket') as Socket
 
-socket?.on('send-turn', (turnData: TicTacToeTurnPayload) => {
+socket.on('send-turn', (turnData: TicTacToeTurnPayload) => {
   board.value[turnData.position[0]][turnData.position[1]] =
     turnData.currentTurnIsO ? 'o' : 'x'
   currentTurnIsO.value = !turnData.currentTurnIsO
 
   checkWinCases()
 })
-socket?.on('send-reset', () => {
+socket.on('send-reset', () => {
   resetBoard()
 })
 
@@ -32,14 +32,14 @@ function updateIsOnlineModeValue() {
 }
 watchEffect(() => {
   if (props.room.length) {
-    socket?.connect()
-    socket?.emit('request-join-room', props.room, (response: string) => {
+    socket.connect()
+    socket.emit('request-join-room', props.room, (response: string) => {
       if (response === 'denied') {
         showModal.value = true
       }
     })
   } else {
-    socket?.disconnect()
+    socket.disconnect()
   }
 })
 
@@ -95,7 +95,7 @@ function checkWinCases() {
 
 function handleEntryClick(rowIdx: number, entryIdx: number) {
   if (!board.value[rowIdx][entryIdx] && !winner.value) {
-    socket?.emit('send-turn', <TicTacToeTurnPayload>{
+    socket.emit('send-turn', <TicTacToeTurnPayload>{
       currentTurnIsO: currentTurnIsO.value,
       position: [rowIdx, entryIdx],
       toRoom: props.room
@@ -116,7 +116,7 @@ function resetBoard() {
   currentTurnIsO.value = false
 }
 function handleResetClick() {
-  socket?.emit('send-reset', props.room)
+  socket.emit('send-reset', props.room)
   resetBoard()
 }
 
@@ -153,8 +153,8 @@ function handleOfflineClick() {
 }
 
 onUnmounted(() => {
-  socket?.off()
-  socket?.disconnect()
+  socket.off()
+  socket.disconnect()
 })
 
 const showModal = ref(false)
