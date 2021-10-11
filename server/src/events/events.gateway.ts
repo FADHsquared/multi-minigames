@@ -53,12 +53,18 @@ export class EventsGateway
 
   @SubscribeMessage('request-join-room')
   handleRequestJoinRoom(
-    @MessageBody() data: string,
+    @MessageBody() room: string,
     @ConnectedSocket() client: Socket
   ) {
-    if (this.server.of('/').adapter.rooms.get(data)?.size >= 2) return 'denied'
+    if (this.server.of('/').adapter.rooms.get(room)?.size >= 2) return 'denied'
     else {
-      client.join(data)
+      client.join(room)
+      this.server
+        .to(room)
+        .emit(
+          'somebody-joined',
+          this.server.of('/').adapter.rooms.get(room)?.size
+        )
       return 'ok'
     }
   }
