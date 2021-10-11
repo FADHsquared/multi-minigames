@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "cd client && npm install --production=false && npm run build && npm prune && cd ../server && npm install --production=false && npm run build && npm prune"
+    "build": "cd client && npm install --production=false && npm run build && npm prune && cd .. && rm -rf client && cd server && npm install --production=false && npm run build && npm prune"
   },
   "repository": {
     "type": "git",
