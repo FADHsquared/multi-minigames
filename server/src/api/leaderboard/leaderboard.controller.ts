@@ -4,7 +4,7 @@ import { LeaderboardJSON } from '../../../../types'
 @Controller('/api/leaderboard')
 export class LeaderboardController {
   @Get()
-  getApiTest(@Query() { top }): LeaderboardJSON {
+  getApiTest(@Query() { top }: { top: number }): LeaderboardJSON {
     const data = [
       {
         name: 'Not FADHsquared',
