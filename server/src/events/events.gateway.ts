@@ -56,15 +56,12 @@ export class EventsGateway
     @MessageBody() room: string,
     @ConnectedSocket() client: Socket
   ) {
-    if (this.server.of('/').adapter.rooms.get(room)?.size >= 2) return 'denied'
+    const currentRoomSize =
+      this.server.of('/').adapter.rooms.get(room)?.size || null
+    if (!!currentRoomSize && currentRoomSize >= 2) return 'denied'
     else {
       client.join(room)
-      this.server
-        .to(room)
-        .emit(
-          'somebody-joined',
-          this.server.of('/').adapter.rooms.get(room)?.size
-        )
+      this.server.to(room).emit('somebody-joined', currentRoomSize)
       return 'ok'
     }
   }
